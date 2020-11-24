@@ -12,9 +12,9 @@ const PostTemplate = (props) => {
   const siteTitle = props.data.site.siteMetadata.title;
   let featuredImage = false;
 
-  if (post.featured_media && post.featured_media.source_url ) {
-    featuredImage = post.featured_media.source_url;
-  }
+  // if (post.featured_media && post.featured_media.source_url ) {
+  //   featuredImage = post.featured_media.source_url;
+  // }
 
   return (
     <Layout location={props.location} title={siteTitle}>
@@ -70,9 +70,6 @@ export const pageQuery = graphql`
       modified
       excerpt
       id
-      featured_media {
-        source_url
-      }
       categories {
         name
         slug
