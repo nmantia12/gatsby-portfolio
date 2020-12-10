@@ -1,0 +1,97 @@
+//Breakpoints, actually
+$big-phone: 375px;
+$tablet: 768px;
+$desktop: 1200px;
+$large-desktop: 1440px;
+$desktop4k: 2000px;
+
+$menu-breakpoint: $desktop;
+
+$content-max-width: 1440;
+
+$gap-sm: 25;
+$gap-md: 50;
+$gap-lg: 70;
+
+$cubic-ease: cubic-bezier(0.155, 0.81, 0.26, 0.995);
+
+// Breakpoints standard
+$current_break: 0;
+$lowest_break: 0;
+
+@mixin break($point) {
+  $current_break: $point !global;
+
+  @media screen and (min-width: #{$point}) {
+    @content;
+  }
+
+  $current_break: $lowest_break !global;
+}
+@mixin max-break($point) {
+  $current_break: $point !global;
+
+  @media screen and (max-width: #{$point}) {
+    @content;
+  }
+
+  $current_break: $lowest_break !global;
+}
+
+// coverts numeral to px
+@function value-to-px($value) {
+  @return #{$value}px;
+}
+
+// coverts numeral to rem
+@function rem($pixels, $context: 16) {
+  @return #{$pixels/$context}rem;
+}
+
+// font-size helper miin to breakdown font size map
+@mixin font-size-map-breakdown($sizeMap) {
+  $sizeValue: nth($sizeMap, 1);
+  $lineHeightValue: nth($sizeMap, 2);
+  $weight: nth($sizeMap, 3);
+  $spacing: nth($sizeMap, 4);
+
+  @if $sizeValue and $sizeValue != null {
+    font-size: value-to-px($sizeValue);
+    font-size: rem($sizeValue);
+  }
+  @if $lineHeightValue and $lineHeightValue != null {
+    line-height: value-to-px($lineHeightValue);
+    line-height: rem($lineHeightValue);
+  }
+  @if $spacing and $spacing != null {
+    letter-spacing: value-to-px($spacing);
+    letter-spacing: rem($spacing);
+  }
+  @if $weight and $weight != null {
+    font-weight: $weight;
+  }
+}
+
+// define breakpoints in array for font-size mixin
+$breakpoints: (
+  phone: $big-phone,
+  tablet: $tablet,
+  desktop: $desktop,
+  desktop4k: $desktop4k
+);
+
+// font size mixin
+@mixin font-size($fs-map, $fs-breakpoints: $breakpoints) {
+  @each $fs-breakpoint, $sizeMap in $fs-map {
+    @if $fs-breakpoint == null or $fs-breakpoint == base {
+      @include font-size-map-breakdown($sizeMap);
+    } @else {
+      @if map-has-key($fs-breakpoints, $fs-breakpoint) {
+        $fs-breakpoint: map-get($fs-breakpoints, $fs-breakpoint);
+      }
+      @include break($fs-breakpoint) {
+        @include font-size-map-breakdown($sizeMap);
+      }
+    }
+  }
+}

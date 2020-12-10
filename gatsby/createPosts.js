@@ -43,15 +43,13 @@ module.exports = async ({ actions, graphql }) => {
     const { edges } = result.data.allWordpressPost;
 
     edges.forEach( edge => {
-      if (edge.node.fields.deploy) {
-        createPage({
-          path: `${postPrefix}/${edge.node.slug}`,
-          component: postTemplate,
-          context: {
-            id: edge.node.id,
-          }
-        })
-      }
+			createPage({
+				path: `${postPrefix}/${edge.node.slug}`,
+				component: postTemplate,
+				context: {
+					id: edge.node.id,
+				}
+			})
     })
     // ==== END POSTS ====
     return null;

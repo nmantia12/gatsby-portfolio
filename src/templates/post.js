@@ -12,9 +12,9 @@ const PostTemplate = (props) => {
   const siteTitle = props.data.site.siteMetadata.title;
   let featuredImage = false;
 
-  // if (post.featured_media && post.featured_media.source_url ) {
-  //   featuredImage = post.featured_media.source_url;
-  // }
+  if (post.featured_media && post.featured_media.source_url ) {
+    featuredImage = post.featured_media.source_url;
+  }
 
   return (
     <Layout location={props.location} title={siteTitle}>
@@ -33,12 +33,12 @@ const PostTemplate = (props) => {
           }}
         >
           <div className="post-date">{post.date}</div>
-          <Link
+          {/* <Link
             className="cat-link"
             to={`/category/${post.categories[0].slug}`}
           >
             {post.categories[0].name}{' '}
-          </Link>
+          </Link> */}
         </div>
 
         <div dangerouslySetInnerHTML={{ __html: post.content }} />
@@ -69,7 +69,10 @@ export const pageQuery = graphql`
       title
       modified
       excerpt
-      id
+			id
+			featured_media {
+				source_url
+      }
       categories {
         name
         slug

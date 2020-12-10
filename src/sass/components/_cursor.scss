@@ -1,0 +1,28 @@
+// *, a {
+// 	cursor: none !important;
+// }
+
+.circle-cursor {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	max-width: 100%;
+	pointer-events: none;
+
+	&--outer {
+		width: 100%;
+		height: 100vh;
+		z-index: 12000;
+	}
+
+	&--inner {
+		width: 5px;
+		height: 5px;
+		left: -2.5px;
+		top: -2.5px;
+		border-radius: 50%;
+		z-index: 11000;
+		background: $white;
+	}
+}

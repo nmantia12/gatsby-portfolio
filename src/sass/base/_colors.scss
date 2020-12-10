@@ -1,0 +1,14 @@
+$black: #111111;
+$accent: #06f4f4;
+$gold: #ffcb9a;
+$white: #d1e8e2;
+
+::-moz-selection {
+    color: $black;
+    background: $accent;
+}
+
+::selection {
+    color: $black;
+    background: $accent;
+}

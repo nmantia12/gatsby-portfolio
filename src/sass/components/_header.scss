@@ -1,0 +1,108 @@
+.logo-container {
+	width: 70px;
+	mix-blend-mode: difference;
+}
+
+.hamburger-wrapper {
+	position: relative;
+	height: 15px;
+	width: 24px;
+	z-index: 99;
+	outline: none !important;
+
+  &.active {
+    background: transparent;
+		transition: all 0.25s 0.5s ease;
+
+		.hamburger {
+			width: 2px;
+			transition: width 0.25s 0.5s ease;
+		}
+
+    .hamburger::before {
+			top: 50%;
+      transform: rotate(-45deg) translateX(-50%) translateY(-50%);
+			left: 50%;
+			right: auto;
+			bottom: auto;
+			transform-origin: left;
+			transition: transform 0.25s 0.5s ease, top 0.25s ease, bottom 0.25s ease, width 0.25s 0.5s ease;
+			-webkit-animation: hamburgerScale 0.25s 0.5s ease;
+    }
+
+		.hamburger::after {
+			top: 50%;
+			left: 50%;
+			right: auto;
+			bottom: 0;
+			transform-origin: left;
+      transform: rotate(45deg) translateX(-50%) translateY(-50%);
+			transition: transform 0.25s 0.5s ease, top 0.25s ease, bottom 0.25s ease, width 0.25s 0.5s ease;
+			-webkit-animation: hamburgerScale 0.25s 0.5s ease;
+    }
+
+    .hamburger::before,
+    .hamburger::after {
+      background: #fff;
+    }
+  }
+}
+
+@keyframes hamburgerScale {
+  0% {
+    width: 24px;
+  }
+  50% {
+    width: 2px;
+  }
+  100% {
+   width: 24px;
+  }
+}
+
+.hamburger {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 2px;
+  width: 24px;
+  border: 0;
+  opacity: 1;
+  z-index: 2;
+  background: #fff;
+  transform: translate(-50%, -50%);
+	transition: all 0.25s ease;
+	outline: none !important;
+	overflow: visible;
+
+  &::before {
+    content: "";
+    position: absolute;
+    width: 24px;
+    height: 2px;
+    top: -6px;
+		left: 50%;
+		transform: translateX(-50%);
+		transform-origin: left;
+    bottom: auto;
+    background: #fff;
+    transition: top 0.25s 0.5s ease, bottom 0.25s 0.5s ease,
+      transform 0.25s ease, width 0.25s 0.5s ease;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    width: 24px;
+    height: 2px;
+    top: auto;
+		left: 50%;
+		transform: translateX(-50%);
+		transform-origin: left;
+    bottom: -6px;
+    background: #fff;
+    transition: top 0.25s 0.5s ease, bottom 0.25s 0.5s ease,
+      transform 0.25s ease, width 0.25s 0.5s ease;
+  }
+}
+
