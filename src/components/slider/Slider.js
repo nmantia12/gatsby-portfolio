@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { gsap, Power0 } from 'gsap';
 import Spinner from '../../../content/assets/loader.gif';
 import DefaultImg from '../../../content/assets/default.png';
-import { store } from './Store';
+// import { store } from './Store';
 import { vertexShader, fragmentShader } from './Shaders';
 import Gl from './Gl';
 import * as THREE from 'three/build/three.module';
@@ -140,7 +140,6 @@ class Slider extends Component {
 	constructor( props ) {
 		super( props );
 		this.bindAll();
-		this.gl = new Gl();
 		this.posts = props.posts;
 
 		this.opts = {
@@ -192,9 +191,9 @@ class Slider extends Component {
 		this.planes = [];
 
 		this.events = {
-			move: store.isDevice ? 'touchmove' : 'mousemove',
-			up: store.isDevice ? 'touchend' : 'mouseup',
-			down: store.isDevice ? 'touchstart' : 'mousedown',
+			move: 'mousemove',
+			up: 'mouseup',
+			down: 'mousedown',
 		};
 
 		this.onComplete = this.onComplete.bind( this );
@@ -237,6 +236,24 @@ class Slider extends Component {
 		this._isMounted = true;
 
 		if (this._isMounted) {
+			this.gl = new Gl();
+			const store = {
+				isDevice:
+					navigator.userAgent.match(/Android/i) ||
+					navigator.userAgent.match(/webOS/i) ||
+					navigator.userAgent.match(/iPhone/i) ||
+					navigator.userAgent.match(/iPad/i) ||
+					navigator.userAgent.match(/iPod/i) ||
+					navigator.userAgent.match(/BlackBerry/i) ||
+					navigator.userAgent.match(/Windows Phone/i),
+			};
+
+			this.events = {
+				move: store.isDevice ? 'touchmove' : 'mousemove',
+				up: store.isDevice ? 'touchend' : 'mouseup',
+				down: store.isDevice ? 'touchstart' : 'mousedown',
+			};
+
 			const canvasEl = document.createElement("div");
 			canvasEl.id = 'slide_canvas';
 			canvasEl.appendChild( this.gl.domEl );
