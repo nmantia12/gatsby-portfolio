@@ -1,6 +1,4 @@
 export const store = {
-	ww: window.innerWidth,
-	wh: window.innerHeight,
 	isDevice:
 		navigator.userAgent.match( /Android/i ) ||
 		navigator.userAgent.match( /webOS/i ) ||

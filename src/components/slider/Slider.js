@@ -351,7 +351,6 @@ class Slider extends Component {
 	}
 
 	setup() {
-		const { ww } = store;
 		const state = this.state;
 
 		if ( this._isMounted ) {
@@ -430,8 +429,8 @@ class Slider extends Component {
 
 			const mesh = plane.mesh;
 			this.planes.push( mesh );
-			el.min = ww;
-			el.max = state.max - ww;
+			el.min = window.innerWidth;
+			el.max = state.max - window.innerWidth;
 			el.out = false;
 		}
 	}
@@ -499,19 +498,18 @@ class Slider extends Component {
 	}
 
 	isVisible( { left, right, width, min, max } ) {
-		const { ww } = store;
 		const { currentRounded } = this.state;
 
 		const translate = gsap.utils.wrap( min, max, currentRounded );
 		const threshold = this.opts.threshold;
 		const start = left + translate;
 		const end = right + translate;
-		const isVisible = start < threshold + ww && end > -threshold;
+		const isVisible = start < threshold + window.innerWidth && end > -threshold;
 
 		const progress = gsap.utils.clamp(
 			0,
 			1,
-			1 - ( translate + left + width ) / ( ww + width )
+			1 - ( translate + left + width ) / ( window.innerWidth + width )
 		);
 
 		return {

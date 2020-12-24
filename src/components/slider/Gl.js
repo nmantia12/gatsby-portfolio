@@ -1,4 +1,3 @@
-import { store } from './Store';
 import waterNormal from '../../../content/assets/waternormals.jpg';
 import * as THREE from 'three';
 import { Water } from 'three/examples/jsm/objects/Water';
