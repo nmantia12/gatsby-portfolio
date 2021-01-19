@@ -1,8 +1,8 @@
 {
-	"name": "gatsby-wordpress-netlify-starter",
-	"description": "A starter for a blog powered by Gatsby and Markdown",
+	"name": "gatsby-portfolio",
+	"description": "Nick Mantia's portfolio site",
 	"version": "2.0.0",
-	"author": "Justin W Hall",
+	"author": "Nick Mantia",
 	"keywords": [
 		"gatsby"
 	],
@@ -10,7 +10,7 @@
 	"main": "n/a",
 	"repository": {
 		"type": "git",
-		"url": "git@github.com:justinwhall/gatsby-wordpress-netlify-starter.git"
+		"url": "git@github.com:nmantia12/gatsby-portfolio.git"
 	},
 	"scripts": {
 		"develop": "gatsby develop",
@@ -29,6 +29,7 @@
 		"gatsby-plugin-manifest": "^2.1.1",
 		"gatsby-plugin-mdx": "^1.5.0",
 		"gatsby-plugin-offline": "^2.1.1",
+		"gatsby-plugin-page-load-delay": "^0.1.2",
 		"gatsby-plugin-react-helmet": "^3.0.12",
 		"gatsby-plugin-sass": "^2.6.0",
 		"gatsby-plugin-sharp": "^2.1.3",

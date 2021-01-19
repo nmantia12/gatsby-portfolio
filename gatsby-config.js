@@ -67,6 +67,7 @@ module.exports = {
     `gatsby-transformer-sharp`,
 		`gatsby-plugin-sharp`,
 		`gatsby-plugin-sass`,
+		'gatsby-plugin-page-load-delay',
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {

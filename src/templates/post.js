@@ -7,7 +7,7 @@ import SEO from "../components/seo"
 import { rhythm } from "../utils/typography"
 
 const PostTemplate = (props) => {
-
+	// window.pageExitTime = 1000
   const post = props.data.wordpressPost;
   const siteTitle = props.data.site.siteMetadata.title;
   let featuredImage = false;
@@ -24,7 +24,7 @@ const PostTemplate = (props) => {
       />
         <h1>{post.title} </h1>
         {featuredImage &&
-              <img src={featuredImage} alt={post.title} className="featured-image" />
+					<img src={featuredImage} alt={post.title} className="featured-image" />
         }
         <div
           className="post-meta"

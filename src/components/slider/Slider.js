@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React, { Component } from 'react';
-// import { navigate } from '@reach/router';
+import { navigate } from 'gatsby';
 import { gsap, Power0 } from 'gsap';
 import Spinner from '../../../content/assets/loader.gif';
 import DefaultImg from '../../../content/assets/default.png';
@@ -149,7 +149,6 @@ class Slider extends Component {
 		};
 
 		this.animate = this.animate.bind( this );
-		this.mouse = new THREE.Vector2();
 		this.state = {
 			resizeId: 0,
 			loading: false,
@@ -209,10 +208,7 @@ class Slider extends Component {
 	doneResizing() {
 		this.setBounds();
 		this.updateCache();
-		this.calc();
-		this.transformItems();
 		this.clampTarget();
-		console.log('done');
 	}
 
 	onWindowResize() {
@@ -220,16 +216,12 @@ class Slider extends Component {
 		this.gl.camera.aspect = window.innerWidth / window.innerHeight;
 		this.gl.camera.updateProjectionMatrix();
 		this.gl.renderer.setSize( window.innerWidth, window.innerHeight );
+		this.setBounds();
+		this.updateCache();
+		this.clampTarget();
 
-		// this.updateCache();
-		// this.setBounds();
-		// this.animate();
-		// this.clampTarget();
-
-		console.log('resize');
-
-		// clearTimeout(state.resizeId);
-		// state.resizeId = setTimeout(this.doneResizing, 1000);
+		clearTimeout(state.resizeId);
+		state.resizeId = setTimeout(this.doneResizing, 1000);
 	}
 
 	componentDidMount() {
@@ -269,8 +261,10 @@ class Slider extends Component {
 			for (let i = 0; i < this.items.length; i++) {
 				const item = this.items[i];
 				const itemWidth = window.innerWidth * 0.7;
-				const padding = window.innerWidth * 0.15;
-				const left = ((i + 1) * padding) + (itemWidth * i);
+				const padding = window.innerWidth * 0.05;
+				const centerPad = (window.innerWidth - itemWidth) / 2
+				let left = ((i + 1) * padding) + (itemWidth * i) + (centerPad - padding);
+				if (i == 0) left = centerPad;
 				const right = left + itemWidth;
 				const itemHeight = itemWidth / (16 / 9);
 
@@ -292,7 +286,8 @@ class Slider extends Component {
 		this._isMounted = false;
 		this.stop();
 		this.destroy();
-		this.canvasEl.removeChild( this.gl.renderer.domElement );
+		document.body.removeChild(this.canvasEl);
+		// this.canvasEl.removeChild( this.gl.renderer.domElement );
 	}
 
 	bindAll() {
@@ -302,7 +297,8 @@ class Slider extends Component {
 	}
 
 	init() {
-		gsap.utils.pipe( this.setup(), this.on() );
+		this.setup();
+		// gsap.utils.pipe( this.setup(), this.on() );
 	}
 
 	destroy() {
@@ -335,12 +331,15 @@ class Slider extends Component {
 
 	setBounds() {
 		const state = this.state;
+		const itemWidth = window.innerWidth * 0.7;
+		const centerPad = (window.innerWidth - itemWidth) / 2;
+		const padding = window.innerWidth * 0.05;
 
 		// Set bounding
 		state.max = -(
 			this.items[ this.items.length - 1 ].right -
 			(window.innerWidth * 0.7) -
-			(window.innerWidth * 0.15)
+			(window.innerWidth * 0.05) + (centerPad - padding)
 		);
 	}
 
@@ -351,8 +350,10 @@ class Slider extends Component {
 		for (let i = 0; i < this.items.length; i++ ) {
 			const item = this.items[i];
 			const itemWidth = window.innerWidth * 0.7;
-			const padding = window.innerWidth * 0.15;
-			const left = ((i + 1) * padding) + (itemWidth * i);
+			const padding = window.innerWidth * 0.05;
+			const centerPad = (window.innerWidth - itemWidth) / 2;
+			let left = ((i + 1) * padding) + (itemWidth * i) + (centerPad - padding);
+			if (i == 0) left = centerPad;
 			const right = left + itemWidth;
 			const itemHeight = itemWidth / (16 / 9);
 
@@ -450,6 +451,8 @@ class Slider extends Component {
 			el.max = state.max - window.innerWidth;
 			el.out = false;
 		}
+
+		this.on();
 	}
 
 	calc() {
@@ -457,6 +460,9 @@ class Slider extends Component {
 		state.current += ( state.target - state.current ) * this.opts.ease;
 		state.currentRounded = ( state.current * 100 ) / 100;
 		state.diff = ( state.target - state.current ) * 0.00125;
+		const itemWidth = window.innerWidth * 0.7;
+		const centerPad = (window.innerWidth - itemWidth) / 2;
+		const padding = window.innerWidth * 0.05;
 
 		state.progress = gsap.utils.clamp(
 			0,
@@ -466,7 +472,7 @@ class Slider extends Component {
 					state.max +
 						( state.max * ( 1 / this.items.length ) -
 						(window.innerWidth * 0.7) * ( 1 / this.items.length ) -
-						(window.innerWidth * 0.15) * ( 1 / this.items.length ) )
+						((window.innerWidth * 0.05) * (1 / this.items.length)) + (centerPad - padding))
 				)
 		);
 
@@ -557,9 +563,7 @@ class Slider extends Component {
 		const state = this.state;
 		this.animBox.style.opacity = 0;
 
-		// navigate( state.intersected, {
-		// 	state: { post: state.selectedPost },
-		// } );
+		navigate( state.intersected );
 	}
 
 	timer() {
@@ -572,6 +576,7 @@ class Slider extends Component {
 			state.timerID = requestAnimationFrame( this.timer );
 			state.counter++;
 		} else {
+			this.onComplete();
 			// animObj.addEventListener( 'complete', this.onComplete );
 			// animObj.play();
 		}
@@ -587,6 +592,7 @@ class Slider extends Component {
 		on.y = y;
 
 		e.preventDefault();
+		this.mouse = new THREE.Vector2();
 		this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 		this.mouse.y = -( event.clientY / window.innerHeight ) * 2 + 1;
 
@@ -597,8 +603,9 @@ class Slider extends Component {
 		if ( intersects.length > 0 ) {
 			if ( INTERSECTED != intersects[ 0 ].object ) {
 				INTERSECTED = intersects[ 0 ].object;
-				state.intersected = INTERSECTED.parent.url;
+				state.intersected = INTERSECTED.parent.el.dataURL;
 				state.selectedPost = INTERSECTED.parent.post;
+				console.log(INTERSECTED);
 				state.activeItemIndex = INTERSECTED.parent.uuid;
 				requestAnimationFrame( this.timer );
 			}
@@ -642,8 +649,8 @@ class Slider extends Component {
 		this.clampTarget();
 		state.off = state.target;
 
-		// state.counter = 0;
-		// cancelAnimationFrame( state.timerID );
+		state.counter = 0;
+		cancelAnimationFrame( state.timerID );
 
 		// const start = performance.now();
 		// requestAnimationFrame( function animate( time ) {

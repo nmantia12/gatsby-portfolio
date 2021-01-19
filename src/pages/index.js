@@ -16,7 +16,7 @@ const BlogIndex = (props) => {
 
   return (
     <Layout location={props.location} title={title}>
-      <SEO title="All posts" />
+      <SEO title="Nick Mantia Design" />
       {/* <Bio /> */}
 			<Slider posts={posts} />
     </Layout>
